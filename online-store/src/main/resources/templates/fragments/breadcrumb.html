@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head >    
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<title>Online-shopping</title>
+	
+</head>
+<body>
+
+	<!-- Breadcrumb -->	
+  	<nav aria-label="breadcrumb" th:fragment="breadcrumb">
+	  	<ol class="breadcrumb" th:if="${homePageActive}">	
+	    	<li class="breadcrumb-item active" aria-current="page">Home</li>
+	  	</ol>
+	  	
+	  	<ol class="breadcrumb" th:if="${aboutPageActive}">	  	
+	    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+	    	<li class="breadcrumb-item active" aria-current="page">About</li>
+	  	</ol>
+	  	
+	  	<ol class="breadcrumb" th:if="${contactPageActive}">	  	
+	    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+	    	<li class="breadcrumb-item active" aria-current="page">Contact</li>
+	  	</ol>
+	  	
+	  	<ol class="breadcrumb" th:if="${categoryPageActive}">	  	
+	    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+	    	<li class="breadcrumb-item"><a th:href="@{/products}">Products</a></li>
+	    	<li class="breadcrumb-item active" aria-current="page" th:text = "${category.name}"></li>
+	  	</ol>
+	  	
+	  	<ol class="breadcrumb" th:if="${prodPageActive}">	  	
+	    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+	    	<li class="breadcrumb-item active" aria-current="page">All products</li>
+	  	</ol>
+	  	
+	</nav>
+	
+</body>
+</html>

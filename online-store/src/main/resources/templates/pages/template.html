@@ -33,9 +33,43 @@
 			</nav>
 		</header>
 		
-		<div id="main-content" layout:fragment="content" role="main" class="main-content mt-5">
+		<div id="main-content" role="main" class="main-content mt-5">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<nav aria-label="breadcrumb" th:replace="fragments/breadcrumb :: breadcrumb">
+						  	<ol class="breadcrumb">						  	
+						    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+						    	<li class="breadcrumb-item"><a href="#">Library</a></li>
+						    	<li class="breadcrumb-item active" aria-current="page">Data</li>
+						  	</ol>
+						</nav>
+					</div>
+				</div>
+				
+				<div class="row">
 
-			The main content goes here ....
+					<div id="sidebar" class="col-lg-3">
+	
+						<h1 class="my-4">Shop Name</h1>
+						<ul class="list-group">	
+							<li class="list-group-item" th:each="cat : ${categories}">				
+								<a th:href="@{'/category/' + ${cat.categoryId} + '/products'}" th:text="${cat.name}"></a> 
+							</li>
+						</ul>
+					</div>
+					<!-- /#sidebar -->
+				
+					<div id="content" layout:fragment="content" class="col-lg-9">
+					
+						The main content goes here ....
+						
+					</div>					
+				</div><!-- /.row -->
+			
+			</div>
+
+			
 			
 		</div>
 
