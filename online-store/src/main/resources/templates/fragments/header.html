@@ -1,0 +1,73 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head >    
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<title>Online Shopping</title>
+	
+</head>
+<body>
+	<header th:fragment="header">
+		<div id="top-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="nav">
+							<li>
+								<a href="mailto:abodjialassani@gmail.com">
+									<span class="pr-3"><i class="fas fa-envelope"></i></span>abodjialassani@gmail.com
+								</a>
+							</li>
+							<li>
+								<a href="tel:0022870467051">
+									<span class="px-3"><i class="fas fa-phone-square"></i></span>(+228) 70 46 70 51
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" href="#">Online Shopping</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsExample04">
+					<ul class="navbar-nav mr-auto">
+						
+						<li class="nav-item active">
+							<a class="nav-link" th:href="@{/home}">Home <span class="sr-only">(current)</span></a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/about}">About</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/services}">Services</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/contact}">Contact</a>
+						</li>						
+					</ul>
+					
+					<!-- Right navigation -->
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/login?logout}">Logout</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/login}">Login</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+</body>
+</html>

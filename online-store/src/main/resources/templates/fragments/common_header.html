@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header(title,links)">  
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="My personal online shopping project, using Spring boot">
+  	<meta name="author" content="Alassani ABODJI">
+
+	<title th:replace="${title}">Online Shopping</title>	
+	<!-- Common styles and scripts -->
+	<link th:href="@{/assets/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/assets/fonts/font-awesome/css/all.min.css}" rel="stylesheet"/>
+	<link th:href="@{/assets/css/style.css}" rel="stylesheet"/>	
+	
+	<script th:inline="javascript">
+		var alz = alz || {};
+		alz.ajax = alz.ajax || {};
+		
+		alz.ajax.url = [[${#httpServletRequest.getContextPath()}]];
+	</script>
+	<!--/* Per-page placeholder for additional links */-->
+  	<th:block th:replace="${links}" />	
+</head>
+<body>
+</body>
+</html>
