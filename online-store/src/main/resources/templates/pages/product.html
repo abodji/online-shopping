@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{pages/template}">
+<head>
+<title th:text="${'Product : ' + {product.name}}"></title>
+<link th:href="@{/assets/data-tables/datatables.min.css}" rel="stylesheet"/>	
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+		<!-- Product image -->
+			<div class="col-sm-4 col-xs-12">
+				<img th:alt="${'Product image'}" th:src="@{/assets/img/phone.jpg}" class="img-thumbnail img-medium" />
+			</div>
+			
+			<!-- Product details -->
+			<div class="col-sm-8 col-xs-12">
+				<h3 th:text="${product.name}"></h3>
+				<hr />				
+				<p th:text="${product.description}"></p>
+				<h4 th:text="${'Unit Price : ' + #numbers.formatDecimal({product.unitPrice}, 3, 'WHITESPACE', 2, 'DEFAULT')}"></h4>
+				<h4>
+					Quantity : <span class="badge badge-warning" th:classappend="${product.quantity > 0} ? '' : 'text-danger'" th:text="${product.quantity > 0} ? ${product.quantity} : 'Out of stock'"></span>
+				</h4>
+				<p>
+					<a class="btn btn-sm btn-info" th:classappend="${product.quantity > 0} ? '' : 'disabled '" th:href="@{'/cart/add/' + ${product.productId} + '/product'}"><i class="fas fa-cart-plus"></i><span class="pl-3">Add to cart</span></a>
+					<a class="btn btn-sm btn-success" th:href="@{'/products'}"><i class="fas fa-arrow-alt-circle-left"></i><span class="pl-3">Back</span></a>
+				</p>				
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -7,7 +7,13 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		Error Page ....
+		<div class="alert alert-danger" role="alert">
+		   <p th:utext="${error}"></p>
+		</div>
+		
+		<p  class="align-middle">
+			<a class="btn btn-large btn-primary align-middle" th:href="@{/}"><i class="fas fa-home"></i> Go Home</a>
+		</p>
 	</div>
 
 </body>

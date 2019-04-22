@@ -1,3 +1,13 @@
 .main-content {
 	min-height:600px;
 }
+
+.img-small {
+	width: 80px;
+}
+
+.dropdown-item.disabled,
+.btn.disabled  {
+	text-decoration: line-through;
+	text-decoration-color: red; 
+}

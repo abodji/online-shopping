@@ -35,6 +35,13 @@
 	    	<li class="breadcrumb-item active" aria-current="page">All products</li>
 	  	</ol>
 	  	
+	  	<ol class="breadcrumb" th:if="${singleProdPageActive}">	  	
+	    	<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+	    	<li class="breadcrumb-item"><a th:href="@{/products}">Products</a></li>
+	    	<li class="breadcrumb-item"><a th:href="@{'/category/' + ${category.categoryId} + '/products'}" th:text = "${category.name}"></a></li>
+	    	<li class="breadcrumb-item active" aria-current="page" th:text = "${product.name}"></li>
+	  	</ol>
+	  	
 	</nav>
 	
 </body>

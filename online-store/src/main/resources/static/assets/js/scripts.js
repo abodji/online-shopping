@@ -1,4 +1,11 @@
 (function($){
+	
+	$("#listproducts").DataTable({
+		lengthMenu: [[3, 5, 10, -1], ['3 records', '5 records', '10 records', 'All records']],
+		pageLenth: 5
+		
+	});
+	
 	var i = $("#pourCpteVirement input");
 	i.on("click", function() {
 		var radio = $(this);

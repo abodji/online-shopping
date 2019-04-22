@@ -1,6 +1,7 @@
 package com.ala2i.online.store.data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -101,8 +102,8 @@ public class Category implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((imgUrl == null) ? 0 : imgUrl.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + Objects.hashCode(imgUrl);
+		result = prime * result + Objects.hashCode(name);
 		return result;
 	}
 
@@ -110,21 +111,18 @@ public class Category implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		
+		if (obj == null || getClass() != obj.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		
 		Category other = (Category) obj;
-		if (imgUrl == null) {
-			if (other.imgUrl != null)
-				return false;
-		} else if (!imgUrl.equals(other.imgUrl))
+		
+		if(!Objects.equals(this.imgUrl, other.imgUrl))
 			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
+		
+		if(!Objects.equals(this.name, other.name))
 			return false;
+		
 		return true;
 	}
 }

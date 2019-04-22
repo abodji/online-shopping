@@ -1,4 +1,4 @@
-package com.ala2i.online.store.repository;
+package com.ala2i.online.store.data.repository;
 
 import java.util.List;
 import java.util.Optional;
