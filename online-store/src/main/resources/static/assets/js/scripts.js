@@ -1,5 +1,8 @@
 (function($){
 	
+	// Initializing Bootstrap custom file input
+	bsCustomFileInput.init();
+	
 	$("#listproducts").DataTable({
 		lengthMenu: [[3, 5, 10, -1], ['3 records', '5 records', '10 records', 'All records']],
 		pageLenth: 5

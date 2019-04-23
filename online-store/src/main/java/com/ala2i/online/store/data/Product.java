@@ -56,6 +56,9 @@ public class Product {
 	@Column(name = "VIEWS")
 	protected Integer views;
 	
+	@Column(name = "IMAGE")
+	protected String image;
+	
 	/*===================== Constructors =====================*/
 	
 	public Product() {
@@ -75,8 +78,19 @@ public class Product {
 		this.purchases = purchases;
 		this.views = views;
 	}
+	
+	
 
 	
+	public Product(String code, String name, String brand, String description, BigDecimal unitPrice,
+			Integer quantity, Boolean isActive, Category category, Supplier supplier, Integer purchases, Integer views,
+			String image) {
+		
+		this(code, name, brand, description, unitPrice, quantity, isActive, category, supplier, purchases, views);
+		
+		this.image = image;
+	}
+
 	/*===================== Getters and Setters =====================*/
 	
 	public Long getProductId() {
@@ -200,6 +214,14 @@ public class Product {
 	
 	public void updateViews() {
 		this.views++;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+	
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	/*===================== Other methods =====================*/

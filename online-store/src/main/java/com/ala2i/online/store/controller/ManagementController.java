@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ala2i.online.store.data.service.CategoryService;
 import com.ala2i.online.store.data.service.ProductService;
+import com.ala2i.online.store.data.service.SupplierService;
 
 @Controller
 public class ManagementController {
@@ -16,12 +17,18 @@ public class ManagementController {
 	private CategoryService categoryService;
 	
 	@Autowired
+	private SupplierService supplierService;
+	
+	@Autowired
 	private ProductService productService;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/manage/products")
 	public String manageProducts(Model model) {
 		
 		model.addAttribute("manageProducts", true);
+		model.addAttribute("categories", categoryService.getActiveCategories());
+		model.addAttribute("suppliers", supplierService.getSuppliers());
+		model.addAttribute("products", productService.getProducts());
 		
 		return "/management/product/products";
 	}
