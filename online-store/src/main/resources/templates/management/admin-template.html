@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/common_header :: common_header(~{::title},~{::link} ?: _)">
+	
+	<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Online-shopping</title>
+	
+	<link th:href="@{/assets/coreui/css/style.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/coreui/pace-progress/css/pace.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/toastr/toastr.min.css}" rel="stylesheet" />
+</head>
+
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header th:replace="fragments/admin-header :: header"></header>
+    
+    <div class="app-body">
+      
+      <div th:replace="fragments/admin-sidebar :: sidebar"></div>
+      
+      <main class="main">
+        
+        <div th:replace="fragments/admin-breadcrumb :: breadcrumb"></div>
+        
+        <div class="container-fluid">
+        	<div class="ui-view">
+        		<div class="ui-view-inner">
+		          <div class="animated fadeIn">
+		            <div class="row">
+		              <div class="col-lg-12"  layout:fragment="ui-view-content">
+		              		UI View content here ....
+		              </div>
+		            </div>
+		            <!-- /.row-->
+		          </div>
+		          
+	          	</div> <!-- /.ui-view-inner -->
+		    </div>
+        </div>
+      </main>
+      
+      <aside class="aside-menu" th:replace="fragments/admin-aside-menu :: aside-menu"></aside>
+      
+    </div>
+    
+	<!-- Footer -->
+	<div th:replace="fragments/admin-footer :: footer"></div>
+    
+    <script th:src="@{/assets/js/jquery-3.3.1.min.js}"></script>
+	<script th:src="@{/assets/js/popper.min.js}"></script>
+	<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}"></script>
+	<script th:src="@{/assets/js/bs-custom-file-input.min.js}"></script>
+	<script th:src="@{/assets/data-tables/datatables.min.js}"></script>	
+	<script th:src="@{/assets/toastr/toastr.min.js}"></script>	
+    
+    <script th:src="@{/assets/coreui/pace-progress/js/pace.min.js}"></script>
+    <script th:src="@{/assets/coreui/perfect-scrollbar/js/perfect-scrollbar.min.js}"></script>
+    <script th:src="@{/assets/coreui/js/coreui.min.js}"></script>
+    <script th:src="@{/assets/js/scripts.js}"></script>
+  </body>
+</html>

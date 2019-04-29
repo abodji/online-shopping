@@ -3,7 +3,6 @@ package com.ala2i.online.store.data;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "ROLES")
@@ -24,13 +25,15 @@ public class Role {
     @Column(name = "ROLE_ID")
     protected Long roleId;
 	
+	@NotNull(message = "Role name must not be null")
+	@Size(min = 3, max = 20, message = "Role name must be between {min} - {max}")
 	@Column(name = "NAME", nullable = false, unique = true)
 	protected String name;
 	
-	@ManyToMany(mappedBy = "roles")
-	protected Set<User> users;
+	@Column(name = "DESCRIPTION")
+	protected String description;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
 		name="ROLES_PRIVILEGES", 
 		joinColumns={ @JoinColumn(name="ROLE_ID", foreignKey = @ForeignKey(name = "FK_RP_ROLE_ID"))},
@@ -45,6 +48,11 @@ public class Role {
 	
 	public Role(String name) {
 		this.name = name;
+	} 
+	
+	public Role(String name, String description) {
+		this.name = name;
+		this.description = description;
 	} 
 	
 	/*===================== Getters and Setters =====================*/
@@ -64,24 +72,10 @@ public class Role {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public void addUser(User user) {
-		if(user != null)
-			users.add(user);
-	}
-	
+		
 	public void addPrivilege(Privilege privilege) {
 		if(privilege != null)
 			privileges.add(privilege);
-	}
-	
-	public Set<User> getUsers(){
-		return users;
-	}
-	
-	public void setUsers(Set<User> users) {
-		if(users != null)
-			users.forEach(this::addUser);
 	}
 	
 	public Set<Privilege> getPrivileges(){
@@ -91,6 +85,14 @@ public class Role {
 	public void setPrivileges(Set<Privilege> privileges) {
 		if(privileges != null)
 			privileges.forEach(this::addPrivilege);
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	/*===================== Hashcode and Equals =====================*/

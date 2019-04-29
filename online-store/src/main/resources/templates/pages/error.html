@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	layout:decorate="~{pages/template}">
+	layout:decorate="~{pages/template-no-sidebar}">
 <head>
 <title>Error</title>
 </head>
@@ -11,7 +11,7 @@
 		   <p th:utext="${error}"></p>
 		</div>
 		
-		<p  class="align-middle">
+		<p  class="text-center">
 			<a class="btn btn-large btn-primary align-middle" th:href="@{/}"><i class="fas fa-home"></i> Go Home</a>
 		</p>
 	</div>

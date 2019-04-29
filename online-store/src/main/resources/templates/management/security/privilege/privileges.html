@@ -1,0 +1,144 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{management/admin-template}">
+<head>
+<title>List of categories</title>
+<link th:href="@{/assets/data-tables/datatables.min.css}" rel="stylesheet"/>	
+</head>
+<body>
+	<div layout:fragment="ui-view-content">
+       	<h2><i class="fas fa-user-shield"></i><span class="pl-3">Privileges Management</span></h2>
+       	<hr class="mb-3">
+       	
+       	<div class="card">
+			<div class="card-header">
+				<i class="fas fa-user-shield"></i><span class="pl-3">Privileges Management</span>
+			</div>
+			
+			<div class="card-body">
+				<div id="action-buttons">
+					<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-form" aria-expanded="false" aria-controls="collapse-form">
+						<i class="fas fa-list"></i><span class="pl-3">Add Privilege</span>
+					</button>
+					
+					<div class="btn-group">						
+						<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fas fa-check-double"></i><span class="pl-3">Actions ...</span> 
+						</button>
+						
+						<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+							<a id="btn-delete-selected-items" class="dropdown-item" href="#">
+								<i class="fas fa-trash-alt"></i><span class="pl-3">Delete selected privileges</span></a>
+							<a id="btn-delete-all" class="dropdown-item" href="/online-shopping/manage/privileges/delete/all">
+								<i class="fas fa-recycle"></i><span class="pl-3">Delete all privileges</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="collapse" th:classappend="${hasErrors} ? 'show' : (${#httpServletRequest.getParameter('new')} ? 'show' : '')" id="collapse-form">
+					<div class="card card-body mt-4">
+					
+						<div class="alert alert-danger" role="alert" th:if="${privilegeExist}">
+						  <h4 class="alert-heading">Error</h4>
+						  <p>Oops, the privilege you want to add already exists.</p>
+						  <hr>
+						  <p class="mb-0">Make some changes and submit the form again.</p>
+						  
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						    <span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+					
+						<!-- Form for adding new privilege -->							      				        	
+						<form class="form-add-privilege" method="post" th:action="@{/manage/privileges}" id="form-add" th:object="${privilege}">
+							<div class="container-fluid">
+								
+								<input type="hidden" name="privilegeId" id="privilegeId" value="" />
+							
+								<div class="row">
+									<div class="col-md-12">									
+										<div class="form-group">
+											<label class="col-form-label" th:for="${#ids.next('name')}">Name</label>
+											<input type="text" th:field="*{name}" class="form-control alz-ctr" placeholder="Category name" required th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Privilege name is required</div>
+										</div>
+									</div>
+									
+									<div class="col-md-12">								  	
+										<div class="form-group">
+											<label class="col-form-label" for="description">Description</label>									  	
+											<textarea id="description" th:field="*{description}" class="form-control" rows="" cols="" name="description"></textarea>										
+										</div>
+									</div>								
+								</div>
+								
+								<div class="row">
+									<div class="col-md-12">								  	
+										<button type="submit" class="btn btn-primary">Save</button>
+										<span class="pl-3"></span>
+										<button id="btn-close-collapse" type="button" class="btn btn-danger">Close</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="card">
+			<div class="card-header">
+           		<i class="fas fa-list"></i><span class="pl-3">Privileges list</span>
+           	</div>
+                   
+            <div class="card-body">
+                <table class="table table-striped table-bordered privileges-list" id="itemsList">
+					<thead>
+						<tr>
+							<th><input type="checkbox" id="select-all-ckbx" value="privilege" /></th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+				
+					<tbody>
+						<tr th:each="priv : ${privileges}">
+							<td>
+			    				<input type="checkbox" class="alz-selected" th:value="${priv.privilegeId}" />
+			    			</td>
+							<td class="align-middle" th:text="${priv.name}"></td>
+							<td class="align-middle" th:text="${priv.description}"></td>
+							<td class="align-middle">
+								<div class="dropdown">
+								  <button class="btn btn-info dropdown-toggle" type="button" th:id="${'dropdownMenuBtn' + priv.privilegeId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <i class="fas fa-list"></i><span class="pl-3">Action</span> 
+								  </button>
+								  <div class="dropdown-menu" th:aria-labelledby="${'dropdownMenuBtn' + priv.privilegeId}">
+								    <a class="dropdown-item btn-edit" th:href="@{'/manage/privileges/' + ${priv.privilegeId} + '/edit'}"><i class="fas fa-edit"></i><span class="pl-3">Edit</span></a>
+								    <a class="dropdown-item btn-delete" th:href="@{'/manage/privileges/' + ${priv.privilegeId} + '/delete'}"><i class="fas fa-trash"></i><span class="pl-3">Delete</span></a>
+								  </div>
+								</div>					
+							</td>
+						</tr>			
+					</tbody>
+					<tfoot>
+						<tr>
+							<th></th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Action</th>
+						</tr>
+					</tfoot>
+				</table>
+               </div>						
+		</div>
+		
+		<!-- Confirmation modal dialog -->
+		<div th:replace="fragments/deletionConfirmationModal :: confirmDeletion('Privilege Deletion', 'Are you sure to delete these privileges ?')"></div>
+		
+	</div>
+</body>
+</html>

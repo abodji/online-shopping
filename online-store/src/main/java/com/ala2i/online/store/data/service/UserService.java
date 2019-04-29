@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ala2i.online.store.data.User;
@@ -44,6 +45,9 @@ public class UserService {
 		
 		if(optDbUser.isPresent())
 			throw new ElementExistsException(String.format("User '%s' already exists", user));
+
+		/* encrypt the password before saving into the database */
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));	
 		
 		return userRepository.save(user);
 	}

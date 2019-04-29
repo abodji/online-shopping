@@ -12,10 +12,8 @@
 	<link th:href="@{/assets/css/style.css}" rel="stylesheet"/>	
 	
 	<script th:inline="javascript">
-		var alz = alz || {};
-		alz.ajax = alz.ajax || {};
-		
-		alz.ajax.url = [[${#httpServletRequest.getContextPath()}]];
+		var alz = alz || {};		
+		alz.context = [[${#httpServletRequest.getContextPath()}]];
 	</script>
 	<!--/* Per-page placeholder for additional links */-->
   	<th:block th:replace="${links}" />	

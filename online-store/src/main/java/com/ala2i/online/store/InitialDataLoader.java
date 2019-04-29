@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +33,10 @@ import com.ala2i.online.store.data.service.SupplierService;
 import com.ala2i.online.store.data.service.UserService;
 
 @Component
+@ComponentScan("com.ala2i.online.store")
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	
-	boolean alreadySetup = true;
+	boolean alreadySetup = false;
 	
 	@Autowired
 	private CountryService countryService;
@@ -58,6 +62,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	@Autowired
 	private SupplierService supplierService;
 
+	@SuppressWarnings("unused")
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -69,8 +74,8 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		
 		List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
 	
-		Role adminRole =  createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-		Role userRole  = createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
+		Role adminRole =  createRoleIfNotFound("ROLE_ADMIN", readPrivilege, writePrivilege);
+		Role userRole  = createRoleIfNotFound("ROLE_USER", readPrivilege);
 		
 		Country gabon = createCountryIfNotFound(new Country("GABON", "GAB", "GA", "Libreville", "Africa", "Central Africa", ""));
 		Country togo  = createCountryIfNotFound(new Country("TOGO", "TGO", "TG", "Lome", "Africa", "West Africa", ""));
@@ -78,21 +83,21 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Address address  = addressRepository.save(new Address(AddressType.Commercial, "SAAS GABON", "LEON MBA", "Libreville", gabon, "Estuaire", "00"));
 		Address address2 = addressRepository.save(new Address(AddressType.Commercial, "Good Tree Consulting", "Rong Maman NDanida", "Lome", togo, "Maritime", "00"));
 		
-		User user = new User("Alassani", "ABODJI", "ala2i", "ala2i", "abodjialassani@gmail.com", "70 46 70 51", true, false, Arrays.asList(address));
-		user.setRoles(new HashSet<>(Arrays.asList(adminRole)));
+		User user = new User("Alassani", "ABODJI", "ala2i", "ala2i", "abodjialassani@gmail.com", "70 46 70 51", true, false, new HashSet<>(Arrays.asList(address)));
+		user.setRoles(adminRole);
 		createUserIfNotFound(user);
 		
-		User user2 = new User("Nimatou", "SALIFOU", "nima", "nima", "salifounimatou@gmail.com", "93 16 87 02", true, false, Arrays.asList(address2));
-		user.setRoles(new HashSet<>(Arrays.asList(adminRole)));
+		User user2 = new User("Nimatou", "SALIFOU", "nima", "nima", "salifounimatou@gmail.com", "93 16 87 02", true, false, new HashSet<>(Arrays.asList(address2)));
+		user.setRoles(adminRole);
 		createUserIfNotFound(user2);
 		
-		User user3 = new User("Aminou", "ABODJI", "baros", "baros", "abodjiaminou@gmail.com", "91 84 81 46", true, false, Arrays.asList(address2));
+		User user3 = new User("Aminou", "ABODJI", "baros", "baros", "abodjiaminou@gmail.com", "91 84 81 46", true, false, new HashSet<>(Arrays.asList(address2)));
 		user.setRoles(new HashSet<>(Arrays.asList(userRole)));
 		createUserIfNotFound(user3);
 		
-		Category computer = categoryService.save(new Category("Computer", "Computers: laptops, desktops"));
-		Category tv = categoryService.save(new Category("TV", "All kinds of televisions"));
-		Category phone = categoryService.save(new Category("Phone", "Mobile phone, telephone, smart phone"));
+		Category computer = createCategoryIfNotFound(new Category("Computer", "Computers: laptops, desktops"));
+		Category tv = createCategoryIfNotFound(new Category("TV", "All kinds of televisions"));
+		Category phone = createCategoryIfNotFound(new Category("Phone", "Mobile phone, telephone, smart phone"));
 		
 		Supplier alasko = createSupplierIfNotFound("Alasko");
 		Supplier petitParis = createSupplierIfNotFound("Petit Paris");
@@ -107,42 +112,64 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	private Role createRoleIfNotFound(String name, List<Privilege> privileges) {
-		Role role = null;
+	private Role createRoleIfNotFound(String name, Set<Privilege> privileges) {
+		return createRoleIfNotFound(name, privileges.stream());
+	}
+	
+	@Transactional
+	private Role createRoleIfNotFound(String name, Privilege... privileges) {
+		return createRoleIfNotFound(name, Stream.of(privileges));
+	}
+	
+	@Transactional
+	private Role createRoleIfNotFound(String name, Stream<Privilege> privileges) {
+		Role dbRole = null;
 		try {
-			role = roleService.getRoleByName(name);
+			dbRole = roleService.getRoleByName(name);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 		}
 		
-		if(role == null) {
-			role = new Role(name);
-			role.setPrivileges(new HashSet<>(privileges));
-			roleService.save(role);
+		if(dbRole == null) {
+			Role role = new Role(name);
+			
+			privileges.map(priv -> createPrivilegeIfNotFound(priv.getName()))
+				.forEach(role::addPrivilege);
+			
+			dbRole = roleService.save(role);
 		}
-		return role;
+		return dbRole;
 	}
 
 	@Transactional
 	private Privilege createPrivilegeIfNotFound(String name) {
-		Privilege privilege = null;
+		Privilege dbPrivilege = null;
 		try {
-			privilege = privilegeService.getPrivilegeByName(name);
+			dbPrivilege = privilegeService.getPrivilegeByName(name);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 		}
-		if(privilege == null) {
-			privilege = new Privilege(name);
-			privilegeService.save(privilege);
+		if(dbPrivilege == null) {
+			dbPrivilege = privilegeService.save(new Privilege(name));
 		}
 		
-		return privilege;
+		return dbPrivilege;
 	}
 	
 	@Transactional
-	private User createUserIfNotFound(User user) {
+	private Privilege createPrivilegeIfNotFound(Privilege privilege) {
+		Privilege dbPrivilege = null;
+		try {
+			dbPrivilege = privilegeService.getPrivilegeByName(privilege.getName());
+		} catch (Exception e) {
+		}
+		if(dbPrivilege == null) {
+			dbPrivilege = privilegeService.save(privilege);
+		}
+		
+		return dbPrivilege;
+	}
+	
+	@Transactional
+	private User createUserIfNotFound(User user, Stream<Role> roles) {
 		User dbUser = null;
 		try {
 			dbUser = userService.getUserByUsername(user.getUsername());
@@ -150,10 +177,23 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		}
 		
 		if(dbUser == null) {
+			roles.map(r -> createRoleIfNotFound(r.getName(), r.getPrivileges()))
+				.forEach(user::addRole);
+
 			dbUser = userService.save(user);
 		}
 		
 		return dbUser;
+	}
+	
+	@Transactional
+	private User createUserIfNotFound(User user) {		
+		return createUserIfNotFound(user, Stream.empty());
+	}
+	
+	@Transactional
+	private User createUserIfNotFound(User user, Role... roles) {
+		return createUserIfNotFound(user, Stream.of(roles));
 	}
 	
 	@Transactional
@@ -200,6 +240,21 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		}
 		
 		return dbSupplier;
+	}
+	
+	private Category createCategoryIfNotFound(Category category) {
+		Category dbCategory = null;
+		
+		try {
+			dbCategory = categoryService.getCategoryByName(category.getName());
+		} catch (Exception e) {
+		}
+		
+		if(dbCategory == null) {
+			dbCategory = categoryService.save(category);
+		}
+		
+		return dbCategory;
 	}
 
 }

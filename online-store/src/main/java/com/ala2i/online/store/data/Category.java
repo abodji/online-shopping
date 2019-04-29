@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "CATEGORY")
@@ -21,6 +23,8 @@ public class Category implements Serializable {
 	@Column(name = "CATEGORY_ID")
 	protected Long categoryId;
 	
+	@NotNull(message = "Category name must not be null")
+	@Size(min = 2, max = 25, message = "Category name must be between {min} - {max} characters")
 	@Column(name = "NAME", nullable = false, unique = true)
 	protected String name;
 	
@@ -88,14 +92,14 @@ public class Category implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 	
-	public Boolean isActive() {
+	public Boolean getActive() {
 		return active;
 	}
 	
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
+	
 	/*========================= OTHER METHODS ============================*/
 	
 	@Override

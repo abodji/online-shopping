@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "PRODUCT")
@@ -21,9 +23,13 @@ public class Product {
     @Column(name = "PRODUCT_ID")
     protected Long productId;
 	
+	@NotNull(message = "Product code must not be null")
+	@Size(min = 4, max = 15, message = "Product code must be between {min} - {max} characters")
 	@Column(name = "CODE", nullable = false, unique = true)
 	protected String code;
 	
+	@NotNull(message = "Product name must not be null")
+	@Size(min = 4, max = 25, message = "Product name must be between {min} - {max} characters")
 	@Column(name = "NAME", nullable = false, unique = true)
 	protected String name;
 	
@@ -33,14 +39,15 @@ public class Product {
 	@Column(name = "DESCRIPTION", length = 2000)
 	protected String description;
 	
-	@Column(name = "UNIT_PRICE")
+	@Column(name = "UNIT_PRICE", nullable = false)
+	@NotNull(message = "Product unit price must not be null")
 	protected BigDecimal unitPrice;
 	
 	@Column(name = "QUANTITY")
 	protected Integer quantity;
 	
 	@Column(name = "IS_ACTIVE")
-	protected Boolean isActive;
+	protected Boolean isActive = false;
 	
 	@ManyToOne
 	@JoinColumn(name = "CATEGORY_ID", foreignKey = @ForeignKey(name = "FK_PRODUCT_CATEGORY_ID"))
@@ -78,10 +85,7 @@ public class Product {
 		this.purchases = purchases;
 		this.views = views;
 	}
-	
-	
-
-	
+		
 	public Product(String code, String name, String brand, String description, BigDecimal unitPrice,
 			Integer quantity, Boolean isActive, Category category, Supplier supplier, Integer purchases, Integer views,
 			String image) {

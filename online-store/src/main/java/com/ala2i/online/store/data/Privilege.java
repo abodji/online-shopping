@@ -1,14 +1,13 @@
 package com.ala2i.online.store.data;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "PRIVILEGES")
@@ -18,11 +17,13 @@ public class Privilege {
     @Column(name = "PRIVILEGE_ID")
     protected Long privilegeId;
 	
+	@NotNull(message = "Privilege name must not be null")
+	@Size(min = 3, max = 20, message = "Privilege name must be between {min} - {max}")
 	@Column(name = "NAME", nullable = false, unique = true)
 	protected String name;
 	
-	@ManyToMany(mappedBy = "privileges")
-	protected Set<Role> roles; 
+	@Column(name = "DESCRIPTION")
+	protected String description;
 	
 	/*===================== Constructors =====================*/
 	
@@ -31,6 +32,11 @@ public class Privilege {
 	
 	public Privilege(String name) {
 		this.name = name;
+	} 
+	
+	public Privilege(String name, String description) {
+		this.name = name;
+		this.description = description;
 	} 
 	
 	/*===================== Getters and Setters =====================*/
@@ -51,18 +57,12 @@ public class Privilege {
 		this.name = name;
 	}
 	
-	public void addRole(Role role) {
-		if(role != null)
-			roles.add(role);
+	public String getDescription() {
+		return description;
 	}
 	
-	public Set<Role> getRoles(){
-		return roles;
-	}
-	
-	public void setRoles(Set<Role> roles) {
-		if(roles != null)
-			roles.forEach(this::addRole);
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	/*===================== Hashcode and Equals =====================*/

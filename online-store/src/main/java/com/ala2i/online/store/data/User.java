@@ -1,13 +1,13 @@
 package com.ala2i.online.store.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,7 +51,7 @@ public class User implements Serializable {
     @Column(name="TOKEN_EXPIRE") 
     protected Boolean tokenExpire;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
 		name="USERS_ROLES", 
 		joinColumns={ @JoinColumn(name="USER_ID", foreignKey = @ForeignKey(name = "FK_UR_USER_ID"))},
@@ -59,13 +59,13 @@ public class User implements Serializable {
 	) 
     protected Set<Role> roles = new HashSet<>(); 
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
 		name="USERS_ADDRESS", 
 		joinColumns={ @JoinColumn(name="USER_ID", foreignKey = @ForeignKey(name = "FK_UA_USER_ID"))},
 	    inverseJoinColumns={ @JoinColumn(name="ADDRESS_ID", foreignKey = @ForeignKey(name = "FK_UA_ADDRESS_ID"))}
 	)
-    protected List<Address> billingAddresses = new ArrayList<>();
+    protected Set<Address> billingAddresses = new HashSet<>();
     
     /*===================== Constructors =====================*/
     
@@ -83,7 +83,7 @@ public class User implements Serializable {
 		this.tokenExpire = tokenExpire;
 	}
 
-	public User(String firstName, String lastName, String username, String password, String email, String phone, Boolean isActive, Boolean tokenExpire, List<Address> billingAddresses) {
+	public User(String firstName, String lastName, String username, String password, String email, String phone, Boolean isActive, Boolean tokenExpire, Set<Address> billingAddresses) {
 		
 		this(firstName, lastName, username, password, email, phone, isActive, tokenExpire);
 		
@@ -160,6 +160,14 @@ public class User implements Serializable {
 	}
 
 	public void setRoles(Set<Role> roles) {
+		setRoles(roles.stream());
+	}
+	
+	public void setRoles(Role... roles) {
+		setRoles(Stream.of(roles));
+	}
+	
+	public void setRoles(Stream<Role> roles) {
 		if(roles != null)
 			roles.forEach(this::addRole);
 	}
@@ -188,11 +196,11 @@ public class User implements Serializable {
 		this.tokenExpire = tokenExpire;
 	}
 	
-	public List<Address> getBillingAddresses() {
-		return new ArrayList<>(billingAddresses);
+	public Set<Address> getBillingAddresses() {
+		return new HashSet<>(billingAddresses);
 	}
 	
-	public void setBillingAddress(List<Address> billingAddress) {
+	public void setBillingAddress(Set<Address> billingAddress) {
 		if(billingAddress != null)
 			billingAddress.forEach(this::addBillingAddress);
 	}

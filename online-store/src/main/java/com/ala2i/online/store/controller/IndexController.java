@@ -20,6 +20,24 @@ public class IndexController {
 	@Autowired
 	private ProductService productService;
 	
+	@RequestMapping("/login")
+	public String login(Model model, String error, String logout) {
+		if(error != null) {
+			model.addAttribute("error", "Username or password invalid.");
+		}
+		
+		if(logout != null) {
+			model.addAttribute("message", "You have been logged out successfully!");
+		}
+
+		return "/pages/login";
+	}
+	
+	@RequestMapping(value = "/403") 
+ 	public String accessDenied() { 
+ 		return"/pages/403"; 
+	}
+	
 	@RequestMapping(value = {"/", "/home", "index"})
 	public String index(Model model) {
 		try {

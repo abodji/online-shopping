@@ -1,0 +1,102 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head >    
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<title>Online-shopping</title>
+	
+</head>
+<body>
+    
+    <div class="sidebar" th:fragment="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/manage/dashboard}">
+                <i class="fas fa-tachometer-alt"></i><span class="pl-3">Dashboard</span></a>
+            </li>
+            
+            <li class="nav-title">Security - Users</li>
+            
+            <li class="nav-item">
+              	<a class="nav-link" th:href="@{/manage/privileges}">
+                	<i class="fas fa-user-shield"></i><span class="pl-3">Privileges</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+              	<a class="nav-link" th:href="@{/manage/roles}">
+                	<i class="fas fa-shield-alt"></i><span class="pl-3">Roles</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+              	<a class="nav-link" th:href="@{/manage/users}">
+                	<i class="fas fa-users"></i><span class="pl-3">Users</span>
+                </a>
+            </li>
+            
+            <li class="nav-title">Products</li>
+         	
+         	<li class="nav-item">
+           		<a class="nav-link" th:href="@{/manage/products}">
+           			<i class="fas fa-pepper-hot"></i><span class="pl-3">Products</span>
+           		</a>
+         	</li>
+            
+            <li class="nav-item nav-dropdown">
+              	<a class="nav-link nav-dropdown-toggle" href="#">
+                	<i class="fas fa-file-signature"></i><span class="pl-3">Details</span>
+                </a>
+                
+              	<ul class="nav-dropdown-items">
+                	<li class="nav-item">
+                  		<a class="nav-link" th:href="@{/manage/categories}">
+                  			<i class="fas fa-puzzle-piece"></i><span class="pl-3">Categories</span>
+                  		</a>
+                	</li>
+                	
+                	<li class="nav-item">
+                  		<a class="nav-link" th:href="@{/manage/suppliers}">
+                  			<i class="fas fa-people-carry"></i><span class="pl-3">Suppliers</span>
+                  		</a>
+                	</li>
+              	</ul>
+            </li>
+            
+            <li class="nav-title">Orders - Payments</li>
+            
+            <li class="nav-item">
+           		<a class="nav-link" th:href="@{/manage/orders}">
+           			<i class="fas fa-handshake"></i><span class="pl-3">Orders</span>
+           		</a>
+         	</li>
+         	
+         	<li class="nav-item">
+           		<a class="nav-link" th:href="@{/manage/credit-cards}">
+           			<i class="fas fa-credit-card"></i><span class="pl-3">Credit Cards</span>
+           		</a>
+         	</li>
+            
+            <li class="divider"></li>
+            
+            <li class="nav-title">Extras</li>
+            
+            <li class="nav-item">
+           		<a class="nav-link" th:href="@{/manage/addresses}">
+           			<i class="fas fa-address-card"></i><span class="pl-3">Addresses</span>
+           		</a>
+         	</li>
+         	
+         	<li class="nav-item">
+           		<a class="nav-link" th:href="@{/manage/countries}">
+           			<i class="fas fa-globe"></i><span class="pl-3">Countries</span>
+           		</a>
+         	</li>
+          </ul>
+        </nav>
+        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+      </div>
+	
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head >    
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<title>Forbidden</title>
+</head>
+<body>
+	<div id="page">
+	
+		<div th:replace="fragments/header :: header"></div>
+		
+		<main class="main-content mt-4">
+		
+			<div class="container">
+				<div class="row">
+				
+					<div class="col-md-12">
+					
+						<div class="alert alert-danger" role="alert">
+							<p>Vous n'avez pas les droits requis pour acceder a cette page</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		</main>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+		
+	</div><!-- #page -->
+
+
+	<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+	<script th:src="@{/js/popper.min.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

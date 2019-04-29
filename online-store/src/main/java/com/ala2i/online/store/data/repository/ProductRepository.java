@@ -72,4 +72,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query(value = "SELECT p FROM Product p WHERE p.isActive = true ORDER BY p.productId DESC")
 	public List<Product> findLatestActiveProducts(Pageable pageable);
 
+	@Query(value = "SELECT COUNT(p) FROM Product p WHERE p.category.categoryId = :categoryId")
+	public int totalProductsOfCategory(Long categoryId);
 }

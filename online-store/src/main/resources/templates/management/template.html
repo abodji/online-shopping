@@ -4,6 +4,7 @@
 
 <head th:replace="fragments/common_header :: common_header(~{::title},~{::link} ?: _)">
 	<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Online-shopping</title>
+	<link rel="stylesheet" th:href="@{/assets/toastr/toastr.min.css}" />
 </head>
 <body>
 	<div id="page">
@@ -61,6 +62,7 @@
 	<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}"></script>
 	<script th:src="@{/assets/data-tables/datatables.min.js}"></script>
 	<script th:src="@{/assets/js/bs-custom-file-input.min.js}"></script>
+	<script th:src="@{/assets/toastr/toastr.min.js}"></script>	
 	<script th:src="@{/assets/js/scripts.js}"></script>
 </body>
 </html>

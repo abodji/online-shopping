@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head > 
+	<title>Online-shopping</title>	
+</head>
+<body>    
+    <!-- Breadcrumb-->
+    <nav aria-label="breadcrumb" role="navigation">
+		<ol class="breadcrumb" th:fragment="breadcrumb">
+		  	<li class="breadcrumb-item">Home</li>
+		  	<li class="breadcrumb-item"><a th:href="@{/manage/admin}">Admin</a></li>
+		  	<li class="breadcrumb-item active">Dashboard</li>
+		  	
+		  	<!-- Breadcrumb Menu-->
+		  	<li class="breadcrumb-menu d-md-down-none">
+		    	<div class="btn-group" role="group" aria-label="Button group">
+		      		<a class="btn" th:href="@{/manage/emails}"><i class="fas fa-bullhorn"></i></a>	      
+		      		<a class="btn" th:href="@{/manage/dashboard}"><i class="fas fa-chart-line"></i><span class="pl-2">Dashboard</span></a>	      		
+		      		<a class="btn" th:href="@{/manage/settings}"><i class="fas fa-tools"></i><span class="pl-2">Settings</span></a>
+		    	</div>
+		  	</li>
+		</ol>
+	</nav>	
+</body>
+</html>

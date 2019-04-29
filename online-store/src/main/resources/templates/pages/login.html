@@ -1,53 +1,63 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{template}">
-<head>
-	<title>Sign in</title>
-</head>
-<body>
-<div layout:fragment="content">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-	<div class="container">
-		<div class="row">
+<head th:replace="fragments/common_header :: common_header(~{::title},~{::link} ?: _)">
+	<title>Login</title>
+</head>
+<body class="login-page">
+	<div id="page" class="login-page">
 		
-			<div class="col-md-6">
+		<div id="main-content" role="main" class="main-content">
+			<div class="container">
+				
+				<div class="row">				
+				
+					<div id="content" class="col-lg-12">
+					
+						<div class="form-wrapper">
+						
+							<form class="form-signin" th:action="@{/login}" method="post">
+							
+								<div class="alert alert-danger mb-3 py-4" th:if="${error}">
+									<strong th:text="${error}"></strong>
+								</div>
+								
+								<div class="alert alert-success mb-3 py-4" th:if="${message}">
+									<strong th:text="${message}"></strong>
+								</div>
+		  						<div class="img-wrapper text-center">
+							  		<img th:src="@{/assets/img/signin.png}">
+							  	</div>
+							  	<h1 class="mb-3 font-weight-normal">Please Login</h1>
+							  	
+							  	<div class="form-group">
+							  		<label for="username" class="sr-only">Your username</label>
+							  		<input name="username" type="text" id="username" class="form-control" placeholder="Username" required autofocus>
+							  	</div>
+							  	
+							  	<div class="form-group mt-4">
+							  		<label for="password" class="sr-only">Password</label>
+							  		<input name="password" type ="password" id="password" class="form-control" placeholder="Password" required>
+							  	</div>
+							  	
+							  	<div class="checkbox mb-3">
+							    	<label>
+							      		<input id="remember-me" type="checkbox" name="remember-me"> Remember me
+						    		</label>
+							  	</div>
+							  					  
+							  	<button class="btn btn-lg btn-info btn-block" type="submit">Log in</button>
+							  	
+							</form>
+							
+						</div>	
+					</div>				
+				</div><!-- /.row -->
 			
-				<div class="alert alert-danger"  th:if="${param.error}" role="alert">
-					<p>Nom d'utilisateur ou mot de passe incorrect</p>
-				</div>
-				
-				<div class="alert alert-danger"  th:if="${param.logout}" role="alert">
-					<p>Vous vous etes deconnectes</p>
-				</div>
-				
-				<form class="form-signin" th:action="@{/login}" method="post">
-				  	
-				  	<img class="mb-4" th:src="@{/resources/img/signin.png}" alt="" width="72" height="72">
-				  	<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-				  	
-				  	<div class="form-group">
-				  		<label for="username" class="sr-only">Your username</label>
-				  		<input name="username" type="text" id="username" class="form-control" placeholder="Username" required autofocus>
-				  	</div>
-				  	
-				  	<div class="form-group mt-4">
-				  		<label for="password" class="sr-only">Password</label>
-				  		<input name="password" type ="password" id="password" class="form-control" placeholder="Password" required>
-				  	</div>
-				  	
-				  	<div class="checkbox mb-3">
-				    	<label>
-				      		<input type="checkbox" value="remember-me"> Remember me
-			    		</label>
-				  	</div>
-				  					  
-				  	<button class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
-				  	
-				</form>
 			</div>
+			
 		</div>
 	</div>
-
-</div>
-
+	<!-- #page -->
 </body>
 </html>

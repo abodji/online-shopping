@@ -1,0 +1,293 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{management/admin-template}">
+<head>
+<title>List of products</title>
+<link th:href="@{/assets/data-tables/datatables.min.css}" rel="stylesheet"/>	
+</head>
+<body>
+	<div layout:fragment="ui-view-content">
+       	<h2><i class="fas fa-home"></i><span class="pl-3">Products Management</span></h2>
+       	<hr class="mb-3">
+       	
+       	<div class="card">
+			<div class="card-header">
+				<i class="fas fa-pepper-hot"></i><span class="pl-3">Products Management</span>
+			</div>
+			
+			<div class="card-body">
+				<div id="action-buttons">
+					<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse-form" aria-expanded="false" aria-controls="collapse-form">
+						<i class="fas fa-list"></i><span class="pl-3">Add Product</span>
+					</button>
+					
+					<div class="btn-group">						
+						<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fas fa-check-double"></i><span class="pl-3">Actions ...</span> 
+						</button>
+						
+						<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+							<a id="btn-delete-selected-items" class="dropdown-item" href="#">
+								<i class="fas fa-trash-alt"></i><span class="pl-3">Delete selected products</span></a>
+							<a id="btn-delete-all" class="dropdown-item" href="/online-shopping/manage/products/delete/all">
+								<i class="fas fa-recycle"></i><span class="pl-3">Delete all products</span></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="collapse" th:classappend="${hasErrors} ? 'show' : ''" id="collapse-form">
+					<div class="card card-body mt-4">
+					
+						<div class="alert alert-danger" role="alert" th:if="${productExist}">
+						  <h4 class="alert-heading">Error</h4>
+						  <p>Oops, the product you want to add already exists.</p>
+						  <hr>
+						  <p class="mb-0">Make some changes and submit the form again.</p>
+						  
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						    <span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+					
+						<!-- Form for adding new product -->							      				        	
+						<form method="post" th:action="@{/manage/products}" class="form-add-product" id="form-add" th:object="${product}">
+							<div class="container-fluid">
+								
+								<input type="hidden" name="productId" id="productId" value="" />
+							
+								<div class="row">
+									<div class="col-md-12">									
+										<div class="form-group">
+											<label class="col-form-label" th:for="${#ids.next('name')}">Name</label>
+											<input type="text" th:field="*{name}" class="form-control alz-ctr" placeholder="Product name" required th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Product name is required</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">								  	
+										<div class="form-group">
+											<label class="col-form-label" for="brand">Brand</label>
+											<input name="brand" type="text" th:field="*{brand}" class="form-control alz-ctr" id="brand" placeholder="Brand">
+										</div>
+									</div>
+									
+									<div class="col-md-6">									
+										<div class="form-group">
+											<label class="col-form-label" for="unitPrice">Unit Price</label>
+											<input name="unitPrice" type="number" th:field="*{unitPrice}" class="form-control alz-ctr" required th:classappend="${#fields.hasErrors('unitPrice')} ? 'is-invalid' : ''">	
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}">Product unit price is required</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">								  	
+										<div class="form-group">
+											<label class="col-form-label" for="quantity">Quantity</label>
+											<input name="quantity" type="number" th:field="*{quantity}" class="form-control alz-ctr" id="quantity" placeholder="Quantity available">
+										</div>
+									</div>
+									
+									<div class="col-md-6">								  	
+										<div class="form-group">
+											<label class="col-form-label" for="views">Views</label>
+											<input name="views" type="number" th:field="*{views}" class="form-control alz-ctr" id="views">
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="col-form-label" for="code">Code</label>
+											<input name="code" type="text" th:field="*{code}" class="form-control alz-ctr" placeholder="Product unique code" required th:classappend="${#fields.hasErrors('code')} ? 'is-invalid' : ''">
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('code')}" th:errors="*{code}">Product unique code is required</div>
+										</div>
+									</div>
+									
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="col-form-label" for="purchases">Purchases</label>
+											<input name="purchases" type="number" th:field="*{purchases}" class="form-control alz-ctr">
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">										  	
+									<div class="col-md-6">								  	
+										<div class="form-group">
+											<label for="category" class="col-form-label">Category<span class="pl-3"><a th:href="@{/manage/categories?new=true}" class="btn btn-sm btn-warning" id="add-category">New Category</a></span></label>
+											<select th:field="*{category}" class="form-control alz-ctr" required th:classappend="${#fields.hasErrors('category')} ? 'is-invalid' : ''">
+												<option value="">Select a category ....</option>
+												<option th:each="cat : ${categories}" th:value="${cat.categoryId}" th:text="${cat.name}"></option>
+											</select>	
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Select a valid product category</div>								  	
+										</div>
+									</div>
+									
+									<div class="col-md-6">								  	
+										<div class="form-group">
+											<label for="supplier" class="col-form-label">Supplier<span class="pl-3"><a th:href="@{/manage/suppliers?new=true}" class="btn btn-sm btn-warning" id="add-supplier">New Supplier</a></span></label>
+											<select th:field="*{supplier}" class="form-control alz-ctr" required th:classappend="${#fields.hasErrors('supplier')} ? 'is-invalid' : ''">
+												<option value="">Select a supplier ...</option>
+												<option th:each="supplier : ${suppliers}" th:value="${supplier.supplierId}" th:text="${supplier.name}"></option>
+											</select>
+											<div class="invalid-feedback" th:if="${#fields.hasErrors('supplier')}" th:errors="*{supplier}">Select a valid product supplier</div>											  	
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-12">								  	
+										<div class="custom-file">
+										  <input name="image" type="file" th:field="*{image}" class="custom-file-input" id="image">
+										  <label data-browse="Choose Product image" class="custom-file-label" for="image">Choose file</label>
+										  <div class="invalid-feedback">Select a valid product image</div>	
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-12">								  	
+										<div class="form-group">
+											<label class="col-form-label" for="description">Description</label>									  	
+											<textarea id="description" th:field="*{description}" class="form-control" rows="" cols="" name="description"></textarea>										
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-12">								  	
+										<button type="submit" class="btn btn-primary">Save</button>
+										<span class="pl-3"></span>
+										<button id="btn-close-collapse" type="button" class="btn btn-danger">Close</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="card">
+			<div class="card-header">
+           		<i class="fas fa-list"></i><span class="pl-3">Products list</span>
+           	</div>
+                   
+            <div class="card-body">
+                <table class="table table-striped table-bordered products-list" id="itemsList">
+					<thead>
+						<tr>
+							<th><input type="checkbox" id="select-all-ckbx" value="product" /></th>
+							<th></th>
+							<th>Name</th>
+							<th>Brand</th>
+							<th>Price</th>
+							<th>Quantity</th>
+							<th>Code</th>
+							<th>Active</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+				
+					<tbody>
+						<tr th:each="prod : ${products}">
+							<td>
+			    				<input type="checkbox" class="alz-selected" th:value="${prod.productId}" />
+			    			</td>
+							<td>
+								 <a th:href="@{'/product/' + ${prod.productId} + '/show'}">
+								 	<img alt="" th:src="@{/assets/img/phone.jpg}" class="img-thumbnail img-small" />
+								</a>
+							</td>
+							<td class="align-middle" th:text="${prod.name}"></td>
+							<td class="align-middle" th:text="${prod.brand}"></td>
+							<td class="align-middle" th:text="${#numbers.formatDecimal({prod.unitPrice}, 3, 'WHITESPACE', 2, 'DEFAULT')}"></td>
+							<td class="align-middle" th:classappend="${prod.quantity > 0} ? '' : 'text-danger'" th:text="${prod.quantity > 0} ? ${prod.quantity} : 'Out of stock'"></td>
+							<td class="align-middle" th:text="${prod.code}"></td>
+							<td class="align-middle">
+								<label class="switch switch-pill switch-label switch-primary">
+								  	<input type="checkbox" class="switch-input" th:value="${prod.productId}" th:checked="${prod.isActive}"/>
+								  	<span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+								</label>
+							</td>
+							<td class="align-middle">
+								<div class="dropdown">
+								  <button class="btn btn-info dropdown-toggle" type="button" th:id="${'dropdownMenuBtn' + prod.productId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <i class="fas fa-list"></i><span class="pl-3">Action</span> 
+								  </button>
+								  <div class="dropdown-menu" th:aria-labelledby="${'dropdownMenuBtn' + prod.productId}">
+								    <a class="dropdown-item btn-edit" th:href="@{'/manage/products/' + ${prod.productId} + '/edit'}"><i class="fas fa-edit"></i><span class="pl-3">Edit</span></a>
+								    <a class="dropdown-item btn-delete" th:href="@{'/manage/products/' + ${prod.productId} + '/delete'}"><i class="fas fa-trash"></i><span class="pl-3">Delete</span></a>
+								  </div>
+								</div>					
+							</td>
+						</tr>			
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>Name</th>
+							<th>Brand</th>
+							<th>Price</th>
+							<th>Quantity</th>
+							<th>Code</th>
+							<th>Action</th>
+						</tr>
+					</tfoot>
+				</table>
+               </div>						
+		</div>
+		
+		<!-- Confirmation modal dialog -->
+		<div th:replace="fragments/deletionConfirmationModal :: confirmDeletion('', 'Are you sure to delete these products ?')"></div>
+		
+		<!-- Category modal dialog -->
+		<!-- Modal -->
+		<div class="modal fade" id="modalNewCategory" tabindex="-1" role="dialog" aria-labelledby="modalNewCategoryLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modalNewCategoryLabel">Add category</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		         <p>Are you sure to validate ?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" id="btn-save-category">Save Changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<!-- Supplier modal dialog -->
+		<!-- Modal -->
+		<div class="modal fade" id="modalNewSupplier" tabindex="-1" role="dialog" aria-labelledby="modalNewSupplierLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modalNewSupplierLabel">Add Supplier</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		         <p>Are you sure to validate ?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" id="btn-save-supplier">Save Changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>
