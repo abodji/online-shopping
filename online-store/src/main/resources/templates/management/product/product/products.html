@@ -51,7 +51,7 @@
 						</div>
 					
 						<!-- Form for adding new product -->							      				        	
-						<form method="post" th:action="@{/manage/products}" class="form-add-product" id="form-add" th:object="${product}">
+						<form method="post" th:action="@{/manage/products}" class="form-add-product" id="form-add" th:object="${product}" enctype="multipart/form-data">
 							<div class="container-fluid">
 								
 								<input type="hidden" name="productId" id="productId" value="" />
@@ -143,7 +143,7 @@
 								<div class="row">
 									<div class="col-md-12">								  	
 										<div class="custom-file">
-										  <input name="image" type="file" th:field="*{image}" class="custom-file-input" id="image">
+										  <input name="image" type="file" class="custom-file-input" id="image">
 										  <label data-browse="Choose Product image" class="custom-file-label" for="image">Choose file</label>
 										  <div class="invalid-feedback">Select a valid product image</div>	
 										</div>

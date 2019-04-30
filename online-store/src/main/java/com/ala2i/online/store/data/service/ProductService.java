@@ -7,9 +7,12 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ala2i.online.store.data.Category;
+import com.ala2i.online.store.data.Photo;
 import com.ala2i.online.store.data.Product;
+import com.ala2i.online.store.data.dao.PhotoDAO;
 import com.ala2i.online.store.data.repository.ProductRepository;
 import com.ala2i.online.store.exceptions.ElementExistsException;
 import com.ala2i.online.store.exceptions.ElementNotFoundException;
@@ -19,6 +22,9 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private PhotoDAO photoDAO;
 	
 	public Product getProductByName(String name) {
 		return productRepository.findByName(name).orElseThrow(
@@ -64,6 +70,20 @@ public class ProductService {
 			throw new ElementExistsException(String.format("Product '%s' already exists", product.getName()));
 		
 		return productRepository.save(product);
+	}
+
+	public void save(Product product, MultipartFile imageFile) throws Exception{
+		product = productRepository.save(product);
+		
+		String fileName = photoDAO.savePhotoImageToDisck(imageFile);
+		
+		Photo photo = new Photo();
+		photo.setProduct(product);
+		photo.setFileName(fileName);
+		photo.setPath(photoDAO.getPath());
+		photo.setFileType(imageFile.getContentType());
+		photo.setSize(imageFile.getSize());
+		photoDAO.save(photo);
 	}
 	
 	public void delete(Long productId){

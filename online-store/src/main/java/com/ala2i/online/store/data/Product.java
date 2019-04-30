@@ -63,8 +63,8 @@ public class Product {
 	@Column(name = "VIEWS")
 	protected Integer views;
 	
-	@Column(name = "IMAGE")
-	protected String image;
+	//@Column(name = "IMAGE")
+	//protected String image;
 	
 	/*===================== Constructors =====================*/
 	
@@ -91,8 +91,6 @@ public class Product {
 			String image) {
 		
 		this(code, name, brand, description, unitPrice, quantity, isActive, category, supplier, purchases, views);
-		
-		this.image = image;
 	}
 
 	/*===================== Getters and Setters =====================*/
@@ -218,14 +216,6 @@ public class Product {
 	
 	public void updateViews() {
 		this.views++;
-	}
-	
-	public String getImage() {
-		return image;
-	}
-	
-	public void setImage(String image) {
-		this.image = image;
 	}
 	
 	/*===================== Other methods =====================*/

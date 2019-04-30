@@ -9,7 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ala2i.online.store.data.Product;
 import com.ala2i.online.store.data.service.CategoryService;
@@ -41,7 +43,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/manage/products")
-	public String saveProduct(@Valid Product product, BindingResult result, Model model) {
+	public String saveProduct(@RequestParam(name = "image") MultipartFile imageFile, @Valid Product product, BindingResult result, Model model) {
 		
 		if(result.hasErrors()) {
 			model.addAttribute("hasErrors", true);
@@ -62,7 +64,12 @@ public class ProductController {
 			return "/management/product/product/products";
 		}
 		
-		productService.save(product);
+		try {
+			productService.save(product, imageFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return "redirect:/manage/products";
 	}
 	
