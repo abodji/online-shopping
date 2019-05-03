@@ -100,6 +100,11 @@ public class UserController {
 		return user;
 	}
 	
+	/**
+	 * Activate/deactivate user
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping("/manage/users/{userId}/activate")
 	@ResponseBody
 	public String activateUser(@PathVariable("userId") Long userId) {
