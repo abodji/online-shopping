@@ -236,7 +236,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		}
 		
 		if(dbSupplier == null) {
-			dbSupplier = supplierService.save(new Supplier(name));
+			dbSupplier = supplierService.save(new Supplier(name, "", ""));
 		}
 		
 		return dbSupplier;

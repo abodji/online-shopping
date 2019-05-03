@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ala2i.online.store.data.Photo;
 
-public interface PhotoDAO {
+public interface UserDAO {
 	/**
 	 * Writes uploaded image to disc
 	 * @param imageFile A MultipartFile from the form to save

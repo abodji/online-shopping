@@ -2,6 +2,8 @@ package com.ala2i.online.store.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import com.ala2i.online.store.data.service.SupplierService;
 
 @Controller
 public class ProductController {
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private CategoryService categoryService;
@@ -32,10 +35,11 @@ public class ProductController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/manage/products")
 	public String showProducts(Model model) {
+		logger.info("Entering products");
 		
 		model.addAttribute("activePage", true);
 		model.addAttribute("categories", categoryService.getActiveCategories());
-		model.addAttribute("suppliers", supplierService.getSuppliers());
+		model.addAttribute("suppliers", supplierService.getAllSuppliers());
 		model.addAttribute("product", new Product());
 		model.addAttribute("products", productService.getProducts());
 		
@@ -48,7 +52,7 @@ public class ProductController {
 		if(result.hasErrors()) {
 			model.addAttribute("hasErrors", true);
 			model.addAttribute("categories", categoryService.getActiveCategories());
-			model.addAttribute("suppliers", supplierService.getSuppliers());
+			model.addAttribute("suppliers", supplierService.getAllSuppliers());
 			model.addAttribute("products", productService.getProducts());
 			
 			return "/management/product/product/products";
@@ -58,7 +62,7 @@ public class ProductController {
 			model.addAttribute("productExist", true);
 			model.addAttribute("hasErrors", true);
 			model.addAttribute("categories", categoryService.getActiveCategories());
-			model.addAttribute("suppliers", supplierService.getSuppliers());
+			model.addAttribute("suppliers", supplierService.getAllSuppliers());
 			model.addAttribute("products", productService.getProducts());			
 			
 			return "/management/product/product/products";

@@ -5,7 +5,7 @@
 	
 	/* Initializing jQuery dataTable */
 	$("#itemsList").DataTable({
-		lengthMenu: [[5, 10, 20, -1], ['5 records', '10 records', '20 records', 'All records']],
+		lengthMenu: [[5, 10, 20, 50, -1], ['5 records', '10 records', '20 records', '50 records', 'All records']],
 		pageLenth: 5
 		
 	});
@@ -57,12 +57,19 @@
 				url = url.replace('{items}', 'categories');
 				title = 'Category';
 				break;
+				
+			case 'user':
+				url = url.replace('{items}', 'users');
+				title = 'User';
+				break;
 		}
 		
 		$.ajax({
 			type: 'get',
 			url: url,			
 			success: function(response, status) {
+				console.log(response);
+				console.log("debug");
 				if(response === 'success') {
 					checkbox.prop('checked', checkbox.is(":checked") ? false : true);
 					toastr.success(title + ' activation/deactivation succeed', title + ' Activation');
@@ -134,6 +141,30 @@
 			case 'product':
 				urlPattern = urlPattern.replace('{items}', 'products');
 				break;
+				
+			case 'supplier':
+				urlPattern = urlPattern.replace('{items}', 'suppliers');
+				break;
+			
+			case 'address':
+				urlPattern = urlPattern.replace('{items}', 'addresses');
+				break;
+				
+			case 'country':
+				urlPattern = urlPattern.replace('{items}', 'countries');
+				break;
+				
+			case 'privilege':
+				urlPattern = urlPattern.replace('{items}', 'privileges');
+				break;
+				
+			case 'role':
+				urlPattern = urlPattern.replace('{items}', 'roles');
+				break;
+			
+			case 'user':
+				urlPattern = urlPattern.replace('{items}', 'users');
+				break;
 		}
 		
 		setQueryString("#itemsList .alz-selected:checked", "#btn-delete-selected-items", urlPattern);
@@ -181,6 +212,30 @@
 			case 'product':
 				setProductFormFieldsValues(item);
 				break;
+				
+			case 'supplier':
+				setSupplierFormFieldsValues(item);
+				break;
+			
+			case 'address':
+				setAddressFormFieldsValues(item);
+				break;
+				
+			case 'country':
+				setCountryFormFieldsValues(item);
+				break;
+				
+			case 'privilege':
+				setPrivilegeFormFieldsValues(item);
+				break;
+				
+			case 'role':
+				setRoleFormFieldsValues(item);
+				break;
+			
+			case 'user':
+				setUsertFormFieldsValues(item);
+				break;
 		}
 	}
 	
@@ -204,14 +259,76 @@
 	function setCategoryFormFieldsValues(category) {
 		var form = $("#form-add");
 		
-		console.log(form);
-		console.log(category);
-		
 		form.find("#categoryId").val(category.categoryId);
 		form.find("#name").val(category.name);
 		form.find("#active").val(category.active);
 		form.find("#imgUrl").val(category.imgUrl);
 		form.find("#description").val(category.description);
+	}
+	
+	function setSupplierFormFieldsValues(supplier) {
+		var form = $("#form-add");
+		
+		form.find("#supplierId").val(supplier.supplierId);
+		form.find("#name").val(supplier.name);
+		form.find("#email").val(supplier.email);
+		form.find("#phone").val(supplier.phone);
+	}
+	
+	function setAddressFormFieldsValues(address) {
+		var form = $("#form-add");
+		
+		form.find("#addressId").val(address.addressId);
+		form.find("#addressType").val(address.addressType);
+		form.find("#city").val(address.city);
+		form.find("#company").val(address.company);
+		form.find("#country").val(address.country.countryId);
+		form.find("#stateProvinceRegion").val(address.stateProvinceRegion);
+		form.find("#street").val(address.street);
+		form.find("#zipCode").val(address.zipCode);
+	}
+	
+	function setCountryFormFieldsValues(country) {
+		var form = $("#form-add");
+		
+		form.find("#countryId").val(country.countryId);
+		form.find("#code").val(country.code);
+		form.find("#codeIso2").val(country.codeIso2);
+		form.find("#capital").val(country.capital);
+		form.find("#continent").val(country.continent);
+		form.find("#localName").val(country.localName);
+		form.find("#name").val(country.name);
+		form.find("#region").val(country.region);
+	}
+	
+	function setPrivilegeFormFieldsValues(privilege) {
+		var form = $("#form-add");
+		
+		form.find("#privilegeId").val(privilege.privilegeId);
+		form.find("#name").val(privilege.name);
+		form.find("#description").val(privilege.description);
+	}
+	
+	function setRoleFormFieldsValues(role) {
+		var form = $("#form-add");
+		
+		form.find("#roleId").val(role.roleId);
+		form.find("#name").val(role.name);
+		form.find("#description").val(role.description);
+		//form.find("#privileges").val(role.privileges);
+	}
+	
+	function setUsertFormFieldsValues(user) {
+		var form = $("#form-add");
+		
+		form.find("#userId").val(user.userId);
+		form.find("#username").val(user.username);
+		form.find("#firstName").val(user.firstName);
+		form.find("#lastName").val(lastName.capital);
+		form.find("#email").val(user.email);
+		form.find("#password").val(user.password);
+		form.find("#phone").val(user.phone);
+		form.find("#region").val(user.region);
 	}
 	
 	function resetForm(frm) {

@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "ADDRESS")
@@ -23,6 +25,7 @@ public class Address {
     protected Long addressId;
     
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Addres type must be null")
     @Column(name = "ADDRESS_TYPE", length = 100)
     protected AddressType addressType;
     
@@ -30,9 +33,13 @@ public class Address {
     protected String company;
     
     @Column(name = "STREET", length = 100, nullable = false)
+    @NotNull(message = "Street must be null")
+    @Size(min = 2, max = 45, message = "Street must be between {min} - {max}")
     protected String street;
     
     @Column(name = "CITY", length = 100, nullable = false)
+    @NotNull(message = "City must be null")
+    @Size(min = 2, max = 45, message = "City must be between {min} - {max}")
     protected String city;
     
     @ManyToOne
@@ -45,6 +52,8 @@ public class Address {
     protected String stateProvinceRegion;
     
     @Column(name = "ZIP_CODE", length = 16, nullable = false)
+    @NotNull(message = "Zip Code must be null")
+    @Size(min = 2, max = 5, message = "Zip code must be between {min} - {max}")
     protected String zipCode;
 
     /*======================================================
@@ -127,55 +136,35 @@ public class Address {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+    
+    /*===================== Other methods =====================*/
+    
+	@Override
+	public int hashCode() {
+		return Objects.hash(addressType, city, company, country, stateProvinceRegion, street, zipCode);
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.addressType);
-        hash = 71 * hash + Objects.hashCode(this.company);
-        hash = 71 * hash + Objects.hashCode(this.street);
-        hash = 71 * hash + Objects.hashCode(this.city);
-        hash = 71 * hash + Objects.hashCode(this.country);
-        hash = 71 * hash + Objects.hashCode(this.stateProvinceRegion);
-        hash = 71 * hash + Objects.hashCode(this.zipCode);
-        return hash;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		
+		Address other = (Address) obj;
+		return addressType == other.addressType 
+				&& Objects.equals(city, other.city)
+				&& Objects.equals(company, other.company) 
+				&& Objects.equals(country, other.country)
+				&& Objects.equals(stateProvinceRegion, other.stateProvinceRegion)
+				&& Objects.equals(street, other.street) 
+				&& Objects.equals(zipCode, other.zipCode);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final Address other = (Address) obj;
-        if (!Objects.equals(this.company, other.company)) {
-            return false;
-        }
-        if (!Objects.equals(this.street, other.street)) {
-            return false;
-        }
-        if (!Objects.equals(this.city, other.city)) {
-            return false;
-        }
-        if (!Objects.equals(this.stateProvinceRegion, other.stateProvinceRegion)) {
-            return false;
-        }
-        if (!Objects.equals(this.zipCode, other.zipCode)) {
-            return false;
-        }
-        if (this.addressType != other.addressType) {
-            return false;
-        }
-        if (!Objects.equals(this.country, other.country)) {
-            return false;
-        }
-        return true;
-    }
-
-	public Object getAddressString() {
-		return String.format("%s (%s), Street %s, Zip Code: %s", city, country, street, zipCode);
+	@Override
+	public String toString() {
+		return String.format("%s (%s), Street %s, Zip Code: %s", city, country.getName(), street, zipCode);
 	}
 }
 

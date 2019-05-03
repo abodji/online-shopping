@@ -109,7 +109,12 @@
 		    <groupId>net.coobird</groupId>
 		    <artifactId>thumbnailator</artifactId>
 		    <version>0.4.8</version>
-		</dependency>					    
+		</dependency>	
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>		
+			<artifactId>spring-boot-starter-activemq</artifactId>		
+		</dependency>				    
 	    
 	</dependencies>
 

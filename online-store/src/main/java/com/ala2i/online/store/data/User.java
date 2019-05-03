@@ -2,6 +2,7 @@ package com.ala2i.online.store.data;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -16,6 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USERS")
@@ -28,25 +32,36 @@ public class User implements Serializable {
     protected Long userId;
 	
 	@Column(name="FIRST_NAME", length = 100) 
+	@NotNull(message = "First name must not be null")
+    @Size(min = 4, max = 100, message = "First name must be between {min} - {max} characters")
     protected String firstName;
 	
-	@Column(name="LAST_NAME", length = 100) 
+	@Column(name="LAST_NAME", length = 100)  
+	@NotNull(message = "Last name must not be null")
+    @Size(min = 4, max = 100, message = "Last name must be between {min} - {max} characters")
     protected String lastName;
     
     @Column(name="USERNAME", length = 45, nullable = false, unique = true) 
+    @NotNull(message = "Username must not be null")
+    @Size(min = 4, max = 100, message = "Username must be between {min} - {max} characters")
     protected String username;
     
     @Column(name="PASSWORD", nullable = false) 
+    @NotNull(message = "User password must not be null")
+    @Size(min = 4, max = 100, message = "User password must be between {min} - {max} characters")
     protected String password;
     
     @Column(name="EMAIL", length = 100, nullable = false, unique = true) 
+    @NotNull(message = "User email address must not be null")
+	@Email(message = "Invalid email provided")
+	@Size(min = 6, max = 100, message = "User email address must be between {min} - {max} characters")	
     protected String email;
     
     @Column(name="PHONE", length = 100) 
     protected String phone;
     
     @Column(name="ACTIVE") 
-    protected Boolean isActive;
+    protected Boolean isActive = false;
     
     @Column(name="TOKEN_EXPIRE") 
     protected Boolean tokenExpire;
@@ -73,13 +88,13 @@ public class User implements Serializable {
 	}
     
     public User(String firstName, String lastName, String username, String password, String email, String phone, Boolean isActive, Boolean tokenExpire) {
-		this.firstName = firstName;
-		this.lastName  = lastName;
-		this.username  = username;
-		this.password  = password;
-		this.email     = email;
-		this.phone     = phone;
-		this.isActive  = isActive;
+		this.firstName   = firstName;
+		this.lastName    = lastName;
+		this.username    = username;
+		this.password    = password;
+		this.email       = email;
+		this.phone       = phone;
+		this.isActive    = isActive;
 		this.tokenExpire = tokenExpire;
 	}
 
@@ -91,7 +106,7 @@ public class User implements Serializable {
 	}
 	
 	public User(User user) {
-		this(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.isActive(), user.getTokenExpire(), user.getBillingAddresses());
+		this(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(), user.getIsActive(), user.getTokenExpire(), user.getBillingAddresses());
 	
 		this.roles = user.getRoles();
 	}	
@@ -142,7 +157,7 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public Boolean isActive() {
+	public Boolean getIsActive() {
 		return isActive;
 	}
 
@@ -210,16 +225,11 @@ public class User implements Serializable {
 			billingAddresses.add(address);
 	}
 	
-	/*===================== Hashcode and Equals =====================*/
+	/*===================== HashCode and Equals =====================*/
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
+		return Objects.hash(email, firstName, lastName, password, phone, username);
 	}
 
 	@Override
@@ -231,21 +241,11 @@ public class User implements Serializable {
 			return false;
 		
 		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
+		return Objects.equals(email, other.email) 
+			&& Objects.equals(firstName, other.firstName)
+			&& Objects.equals(lastName, other.lastName) 
+			&& Objects.equals(password, other.password)
+			&& Objects.equals(phone, other.phone) 
+			&& Objects.equals(username, other.username);
 	}
 }

@@ -5,8 +5,11 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -18,28 +21,42 @@ public class Country implements Serializable{
     private static final long serialVersionUID = -5016384215094193913L;
 
 	@Id
-    @GeneratedValue(generator = "GENERATOR")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "COUNTRY_ID")
     protected Long countryId;
     
+	@NotNull(message = "Country name must not be null")
+	@Size(min = 4, message = "Country name must be at least {min} characters")
     @Column(name = "NAME", nullable = false, unique = true)
     protected String name;
     
+	@NotNull(message = "Country Code ISO must not be null")
+	@Size(min = 3, max = 3, message = "Country Code ISO must be {min} characters")
     @Column(name = "CODE", length = 3, nullable = false)
     protected String code;
     
-    @Column(name = "CODE_ISO2", length = 2, nullable = false)
+	@NotNull(message = "Country Code ISO 2 must not be null")
+	@Size(min = 2, max = 2, message = "Country Code ISO 2 must be {min} characters")
+	@Column(name = "CODE_ISO2", length = 2, nullable = false)
     protected String codeIso2;
     
-    @Column(name = "CAPITAL", length = 45, nullable = false)
+	/*@NotNull(message = "Capital must not be null")
+	@Size(min = 3, max = 45, message = "Capital must be between {min} - {max} characters")
+    @Column(name = "CAPITAL", length = 45, nullable = false)*/
     protected String capital;
     
+	@NotNull(message = "Continent must not be null")
+	@Size(min = 3, max = 45, message = "Continent must be between {min} - {max} characters")
     @Column(name = "CONTINENT", length = 45, nullable = false)
     protected String continent;
     
+	@NotNull(message = "Region must not be null")
+	@Size(min = 3, max = 45, message = "Region must be between {min} - {max} characters")
     @Column(name = "REGION", length = 45, nullable = false)
     protected String region;
     
+	@NotNull(message = "Local name must not be null")
+	@Size(min = 3, max = 100, message = "Local name must be between {min} - {max} characters")
     @Column(name = "LOCAL_NAME", length = 100, nullable = false)
     protected String localName;
     

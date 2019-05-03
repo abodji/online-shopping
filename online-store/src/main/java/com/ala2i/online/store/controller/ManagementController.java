@@ -28,7 +28,7 @@ public class ManagementController {
 		
 		model.addAttribute("manageProducts", true);
 		model.addAttribute("categories", categoryService.getActiveCategories());
-		model.addAttribute("suppliers", supplierService.getSuppliers());
+		model.addAttribute("suppliers", supplierService.getAllSuppliers());
 		model.addAttribute("products", productService.getProducts());
 		
 		return "/management/dashboard";

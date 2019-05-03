@@ -11,17 +11,17 @@ import com.ala2i.online.store.data.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	/**
-	 * Gets a user by its name
+	 * Retrieves user by its name
 	 * 
-	 * @param name The name of the user to fetch
+	 * @param name The name of the user to retrieve
 	 * @return An optional of user
 	 */
 	public Optional<User> findByUsername(String username);
 	
 	/**
-	 * Gets a user by its email address
+	 * Retrieve a user by its email address
 	 * 
-	 * @param email The email address of the user to fetch
+	 * @param email The email address of the user to retrieve
 	 * @return An optional of user
 	 */
 	public Optional<User> findByEmail(String email);

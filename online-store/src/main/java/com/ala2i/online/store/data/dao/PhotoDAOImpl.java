@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -89,6 +91,33 @@ public class PhotoDAOImpl implements PhotoDAO {
 			return resource;
 		else
 			throw new FileStorageException("Unexisting or unreadable resource");
+	}
+	
+	@Override
+	public void delete(Long photoId) {
+		Objects.requireNonNull(photoId, "Photo ID must not be null");
+		
+		photoRepository.deleteById(photoId);
+	}
+	
+	@Override
+	public void deleteByProduct(Long productId) {
+		photoRepository.deleteByProduct(productId);
+	}
+	
+	@Override
+	public void deete(Photo photo) {
+		Objects.requireNonNull(photo, "Photo object must not be null");
+		
+		photoRepository.delete(photo);
+	}
+	
+	@Override
+	public void delete(String fileName) {
+		Objects.requireNonNull(fileName, "File name must not be null");
+		
+		Optional<Photo> optDbPhoto = photoRepository.findByFileName(fileName);
+		optDbPhoto.ifPresent(photoRepository::delete);
 	}
 	
 	@Override

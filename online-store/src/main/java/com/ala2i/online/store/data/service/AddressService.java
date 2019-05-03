@@ -1,14 +1,13 @@
 package com.ala2i.online.store.data.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ala2i.online.store.data.Address;
 import com.ala2i.online.store.data.repository.AddressRepository;
-import com.ala2i.online.store.exceptions.ElementExistsException;
 import com.ala2i.online.store.exceptions.ElementNotFoundException;
 
 @Service
@@ -16,8 +15,7 @@ public class AddressService {
 	
 	@Autowired
 	private AddressRepository addressRepository;
-	
-	
+		
 	public List<Address> getAllAddresses(){
 		return addressRepository.findAll();
 	}
@@ -29,12 +27,42 @@ public class AddressService {
 	}
 	
 	public Address save(Address address) {
-		Optional<Address> optAddress = addressRepository.findAll().stream()
-			.filter(ad -> ad.equals(address))
-			.findFirst();
-		if(optAddress.isPresent())
-			throw new ElementExistsException(String.format("Address '%s' already exists", address.getAddressString()));
-		
 		return addressRepository.save(address);
+	}
+	
+	public void deleteAll() {
+		addressRepository.deleteAllIfNoUserAttached();
+	}
+	
+	public void deleteByUser(Long userId) {
+		addressRepository.deleteByUser(userId);
+	}
+	
+	public void deleteSelected(Stream<Long> productIds){
+		productIds.forEach(this::delete);
+	}
+	
+	public void deleteSelected(Long[] productIds){
+		deleteSelected(Stream.of(productIds));
+	}
+	
+	public void deleteSelected(String[] selectedIds){
+		deleteSelected(Stream.of(selectedIds).map(Long::new));
+	}
+
+	public void delete(long addressId) {
+		addressRepository.deleteIfNoUserAttached(addressId);
+	}
+	
+	public boolean exists(Long addressId) {
+		return addressRepository.existsById(addressId);
+	}
+
+	public void deleteSelectedByUser(String[] selectedIds) {
+		Stream.of(selectedIds).map(Long::new).forEach(this::deleteByUser);		
+	}
+	
+	public void deleteSelectedByUser(Long[] selectedIds) {
+		Stream.of(selectedIds).forEach(this::deleteByUser);		
 	}
 }
