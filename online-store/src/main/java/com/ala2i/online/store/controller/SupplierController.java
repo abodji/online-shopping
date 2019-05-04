@@ -65,6 +65,24 @@ public class SupplierController {
 		return "redirect:/manage/suppliers";
 	}
 	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/manage/suppliers/products")
+	@ResponseBody
+	public String saveSupplierFromProduct(@Valid Supplier supplier, BindingResult result, Model model) {
+		
+		if(result.hasErrors()) {
+			return "failure:hasErrors";
+		} 
+		
+		if(supplier.getSupplierId() == null && supplierService.exists(supplier)) {
+			return "failure:alreadyExist";
+		}
+		
+		supplierService.save(supplier);
+		
+		return "success";
+	}
+	
 	/**
 	 * Gets a particular supplier to edit
 	 * 

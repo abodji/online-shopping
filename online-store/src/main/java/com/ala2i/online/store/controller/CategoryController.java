@@ -65,6 +65,23 @@ public class CategoryController {
 		return "redirect:/manage/categories";
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/manage/categories/products")
+	@ResponseBody
+	public String saveSupplierFromProduct(@Valid Category category, BindingResult result, Model model) {
+		
+		if(result.hasErrors()) {
+			return "failure:hasErrors";
+		} 
+		
+		if(category.getCategoryId() == null && categoryService.exists(category)) {
+			return "failure:alreadyExist";
+		}
+		
+		categoryService.save(category);
+		
+		return "success";
+	}
+	
 	@RequestMapping("/manage/categories/{categoryId}/activate")
 	@ResponseBody
 	public String activateCategory(@PathVariable("categoryId") Long categoryId) {

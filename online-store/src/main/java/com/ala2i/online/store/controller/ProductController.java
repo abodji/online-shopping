@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ala2i.online.store.data.Category;
 import com.ala2i.online.store.data.Product;
+import com.ala2i.online.store.data.Supplier;
 import com.ala2i.online.store.data.service.CategoryService;
 import com.ala2i.online.store.data.service.ProductService;
 import com.ala2i.online.store.data.service.SupplierService;
@@ -41,6 +43,8 @@ public class ProductController {
 		model.addAttribute("categories", categoryService.getActiveCategories());
 		model.addAttribute("suppliers", supplierService.getAllSuppliers());
 		model.addAttribute("product", new Product());
+		model.addAttribute("category", new Category());
+		model.addAttribute("supplier", new Supplier());
 		model.addAttribute("products", productService.getProducts());
 		
 		return "/management/product/product/products";

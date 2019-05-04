@@ -14,10 +14,9 @@ import com.ala2i.online.store.exceptions.ElementExistsException;
 import com.ala2i.online.store.exceptions.ElementNotFoundException;
 
 @Service
-public class UserService {
-	
+public class UserService{
 	@Autowired
-	private UserRepository userRepository;
+	UserRepository userRepository;
 	
 	public User getUserByUsername(String username) {
 		return userRepository.findByUsername(username).orElseThrow(

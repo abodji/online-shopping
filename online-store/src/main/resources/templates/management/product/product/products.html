@@ -257,10 +257,53 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		         <p>Are you sure to validate ?</p>
+		        <!-- Form for adding new category -->							      				        	
+				<form class="form-add-category" method="post" th:action="@{/manage/categories/products}" th:object="${category}">
+					<div class="container-fluid">
+						
+						<input type="hidden" name="categoryId" id="categoryId" value="" />
+						<input type="hidden" name="itemType" value="category" />
+					
+						<div class="row">
+							<div class="col-md-12">									
+								<div class="form-group">
+									<label class="col-form-label" th:for="${#ids.next('name')}">Name</label>
+									<input type="text" th:field="*{name}" class="form-control alz-ctr" placeholder="Category name" required th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+									<div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name is required</div>
+								</div>
+							</div>
+							
+							<div class="col-md-12">								  	
+								<div class="custom-file">
+								  <input type="file" th:field="*{imgUrl}" class="custom-file-input">
+								  <label data-browse="Choose category image" class="custom-file-label" for="imgUrl">Choose file</label>
+								  <div class="invalid-feedback">Select a valid category image</div>	
+								</div>
+							</div>
+							
+							<div class="col-md-12">								  	
+								<div class="form-group mt-3">
+									<div class="form-check">
+								      	<input class="form-check-input" type="checkbox" th:field="*{active}">
+								      	<label class="form-check-label" for="active">
+								        	Is this category active ?
+								      	</label>
+								    </div>
+								</div>
+							</div>	
+							
+							<div class="col-md-12">								  	
+								<div class="form-group">
+									<label class="col-form-label" for="description">Description</label>									  	
+									<textarea id="description" th:field="*{description}" class="form-control" rows="" cols="" name="description"></textarea>										
+								</div>
+							</div>								
+						</div>
+					</div>
+				</form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-danger btn-close-and-reload" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary" id="btn-save-category">Save Changes</button>
 		      </div>
 		    </div>
@@ -279,10 +322,44 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		         <p>Are you sure to validate ?</p>
+		         <!-- Form for adding new supplier -->							      				        	
+				<form class="form-add-supplier" method="post" th:action="@{/manage/suppliers/products}" th:object="${supplier}">
+					<div class="container-fluid">
+						
+						<input type="hidden" name="supplierId" id="supplierId" value="" />
+						<input type="hidden" name="itemType" value="supplier" />
+						<div class="row">
+							<div class="col-md-12">									
+								<div class="form-group">
+									<label class="col-form-label" th:for="${#ids.next('name')}">Name</label>
+									<input type="text" th:field="*{name}" class="form-control alz-ctr" placeholder="Supplier name" required th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+									<div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Supplier name is required</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-6">								  	
+								<div class="form-group">
+									<label class="col-form-label" th:for="${#ids.next('email')}">Email address</label>
+									<input type="email" th:field="*{email}" class="form-control alz-ctr" placeholder="john.doe@example.com" required th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+									<div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Supplier email address is required</div>
+								</div>
+							</div>	
+							
+							<div class="col-md-6">								  	
+								<div class="form-group">
+									<label class="col-form-label" th:for="${#ids.next('phone')}">Telephone</label>
+									<input type="text" th:field="*{phone}" class="form-control alz-ctr" placeholder="Supplier telephone" required th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''">
+									<div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Supplier telephone is required</div>
+								</div>
+							</div>								
+						</div>
+					</div>
+				</form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-danger btn-close-and-reload" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary" id="btn-save-supplier">Save Changes</button>
 		      </div>
 		    </div>

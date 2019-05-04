@@ -23,6 +23,7 @@ import com.ala2i.online.store.data.Product;
 import com.ala2i.online.store.data.Role;
 import com.ala2i.online.store.data.Supplier;
 import com.ala2i.online.store.data.User;
+import com.ala2i.online.store.data.dao.UserDAO;
 import com.ala2i.online.store.data.repository.AddressRepository;
 import com.ala2i.online.store.data.service.CategoryService;
 import com.ala2i.online.store.data.service.CountryService;
@@ -30,7 +31,6 @@ import com.ala2i.online.store.data.service.PrivilegeService;
 import com.ala2i.online.store.data.service.ProductService;
 import com.ala2i.online.store.data.service.RoleService;
 import com.ala2i.online.store.data.service.SupplierService;
-import com.ala2i.online.store.data.service.UserService;
 
 @Component
 @ComponentScan("com.ala2i.online.store")
@@ -45,7 +45,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	AddressRepository addressRepository;
 	
 	@Autowired
-	private UserService userService;
+	private UserDAO userService;
 	
 	@Autowired
 	private RoleService roleService;

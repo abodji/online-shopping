@@ -68,8 +68,6 @@
 			type: 'get',
 			url: url,			
 			success: function(response, status) {
-				console.log(response);
-				console.log("debug");
 				if(response === 'success') {
 					checkbox.prop('checked', checkbox.is(":checked") ? false : true);
 					toastr.success(title + ' activation/deactivation succeed', title + ' Activation');
@@ -82,7 +80,7 @@
 		});		
 	});
 	
-	/* Launching modal form for product editing */
+	/* Launching modal form for item editing */
 	$("#itemsList .btn-edit").on("click", function(evt){
 		evt.preventDefault();
 		
@@ -101,6 +99,67 @@
 			}
 		});				
 	});	
+	
+	/* Launching modal box for adding new category */
+	$("#add-category").on("click", function(evt) {
+		evt.preventDefault();
+		
+		$("#modalNewCategory").modal();
+	});
+	
+	$("#add-supplier").on("click", function(evt) {
+		evt.preventDefault();
+		
+		$("#modalNewSupplier").modal();		
+	});
+	
+	$("#modalNewCategory #btn-save-category").on("click", function(evt) {
+		evt.preventDefault();
+		
+		sendModalData('#modalNewCategory form');
+	});
+	
+	$("#modalNewSupplier #btn-save-supplier").on("click", function(evt) {
+		evt.preventDefault();
+		
+		sendModalData('#modalNewSupplier form');
+		
+		/*
+		var frm = $('#modalNewSupplier form');
+		var data = {};
+		$.each(frm.find(".alz-ctr"), function(index, value){
+			var input = $(value);
+			data[input.attr('name')] = input.val();
+			delete data['undefined'];
+		});
+		
+		var type = frm.attr("method");
+		var href = frm.attr("action");
+		
+		$.ajax({
+			type: type,
+			data: data,
+			url: href,			
+			success: function(response, status) {
+				
+				if(response === 'success') {					
+					
+					toastr.success('Supplier added successfully.', 'New Supplier', {"timeOut" : 5000, "progressBar": true, "closeButton": true});
+					
+				} else if(response === 'failure:hasErrors') {
+					toastr.error("Fail to add new supplier, there are some errors, please fill well the form and re-submit!", "Fail to add new supplier", {"timeOut" : 5000, "progressBar": true, "closeButton": true});
+				} else if(response === 'failure:alreadyExist') {
+					toastr.error("The supplier you want to add already exists, please fill well the form and re-submit!", "Fail to add new supplier");
+				} else {
+					toastr.error("Internal server error", "Fail to add new supplier");
+				}
+			}
+		});		*/		
+	});
+	
+	$(".btn-close-and-reload").on("click", function(evt) {
+		window.location.reload();	
+	});
 	
 	/* Deleting single item */
 	$("#itemsList .btn-delete").on("click", function(evt){
@@ -129,6 +188,42 @@
 		$("#btn-confirmation-delete").attr("href", href);
 		$("#confirmationModalDialog").modal();
 	});
+	
+	function sendModalData(formCssSelector) {
+		var frm = $(formCssSelector);
+		var data = {};
+		$.each(frm.find(".alz-ctr"), function(index, value){
+			var input = $(value);
+			data[input.attr('name')] = input.val();
+			delete data['undefined'];
+		});
+		
+		var type = frm.attr("method");
+		var href = frm.attr("action");
+		var title = href.indexOf('supplier') > 0 ? 'supplier' : 'category';
+		
+		
+		$.ajax({
+			type: type,
+			data: data,
+			url: href,			
+			success: function(response, status) {
+				toastr.options = {"timeOut" : 5000, "progressBar": true, "closeButton": true};
+				
+				if(response === 'success') {					
+					
+					toastr.success(title + ' added successfully.', 'New ' + title);
+					
+				} else if(response === 'failure:hasErrors') {
+					toastr.error("Fail to add new " + title + ", there are some errors, please fill well the form and re-submit!", "Fail to add new " + title);
+				} else if(response === 'failure:alreadyExist') {
+					toastr.error("The " + title + " you want to add already exists, please fill well the form and re-submit!", "Fail to add new " + title);
+				} else {
+					toastr.error("Internal server error", "Fail to add new " + title);
+				}
+			}
+		});	
+	}
 	
 	function buildQueryString(type){
 		var urlPattern = alz.context + "/manage/{items}/[queryString]/delete/selected";
