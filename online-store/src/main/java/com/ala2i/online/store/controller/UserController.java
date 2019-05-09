@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ala2i.online.store.data.User;
-import com.ala2i.online.store.data.dao.UserDAO;
 import com.ala2i.online.store.data.service.AddressService;
 import com.ala2i.online.store.data.service.RoleService;
+import com.ala2i.online.store.data.service.UserService;
 
 @Controller
 public class UserController {
 	
 	@Autowired
-	private UserDAO userService;
+	private UserService userService;
 	
 	@Autowired
 	private AddressService addressService;
